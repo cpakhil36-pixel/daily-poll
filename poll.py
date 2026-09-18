@@ -12,6 +12,8 @@ BANKING_CHAT_ID = os.environ["BANKING_CHAT_ID"]
 
 QUESTIONS_PER_DAY = 15
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 def send_quiz(chat_id, question, options, correct_answer):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPoll"
@@ -32,12 +34,15 @@ def send_quiz(chat_id, question, options, correct_answer):
     )
 
     with urllib.request.urlopen(request) as response:
-        result = response.read().decode("utf-8")
-        print(result)
+        print(response.read().decode("utf-8"))
 
 
 def send_from_csv(filename, chat_id):
-    with open(filename, "r", encoding="utf-8-sig") as file:
+    filepath = os.path.join(BASE_DIR, filename)
+
+    print(f"Reading file: {filepath}")
+
+    with open(filepath, "r", encoding="utf-8-sig") as file:
         reader = csv.DictReader(file)
         rows = list(reader)
 
@@ -45,7 +50,6 @@ def send_from_csv(filename, chat_id):
         print(f"{filename} is empty")
         return
 
-    # Different questions each day
     day_number = datetime.utcnow().date().toordinal()
     start = ((day_number - 1) * QUESTIONS_PER_DAY) % len(rows)
 
@@ -73,6 +77,8 @@ def send_from_csv(filename, chat_id):
             correct_answer
         )
 
+
+print("Starting Telegram Quiz Bot...")
 
 print("Sending SSC polls...")
 send_from_csv("ssc.csv", SSC_CHAT_ID)
