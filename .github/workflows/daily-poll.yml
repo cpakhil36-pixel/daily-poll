@@ -1,0 +1,21 @@
+name: Daily Telegram Polls
+
+on:
+  schedule:
+    - cron: "30 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  send-polls:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run poll bot
+        run: python poll.py
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          SSC_CHAT_ID: ${{ secrets.SSC_CHAT_ID }}
+          BANKING_CHAT_ID: ${{ secrets.BANKING_CHAT_ID }}
