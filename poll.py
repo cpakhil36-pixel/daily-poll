@@ -6,11 +6,9 @@ import urllib.parse
 from datetime import datetime
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
-
 SSC_CHAT_ID = os.environ["SSC_CHAT_ID"]
-BANKING_CHAT_ID = os.environ["BANKING_CHAT_ID"]
 
-QUESTIONS_PER_DAY = 15
+QUESTIONS_PER_DAY = 8
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -78,12 +76,9 @@ def send_from_csv(filename, chat_id):
         )
 
 
-print("Starting Telegram Quiz Bot...")
+print("Starting SSC Quiz Bot...")
 
-print("Sending SSC polls...")
+print("Sending 8 SSC polls...")
 send_from_csv("ssc.csv", SSC_CHAT_ID)
 
-print("Sending Banking polls...")
-send_from_csv("banking.csv", BANKING_CHAT_ID)
-
-print("All 30 polls sent successfully!")
+print("All 8 SSC polls sent successfully!")
