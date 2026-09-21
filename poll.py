@@ -13,7 +13,7 @@ QUESTIONS_PER_DAY = 8
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def send_quiz(chat_id, question, options, correct_answer):
+def send_quiz(chat_id, question, options, correct_answer, explanation):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPoll"
 
     data = {
@@ -22,7 +22,8 @@ def send_quiz(chat_id, question, options, correct_answer):
         "options": json.dumps(options, ensure_ascii=False),
         "type": "quiz",
         "correct_option_id": correct_answer,
-        "is_anonymous": True
+        "is_anonymous": True,
+        "explanation": explanation
     }
 
     request = urllib.request.Request(
@@ -57,6 +58,7 @@ def send_from_csv(filename, chat_id):
     ]
 
     for row in selected:
+
         question = row["question"]
 
         options = [
@@ -68,17 +70,21 @@ def send_from_csv(filename, chat_id):
 
         correct_answer = int(row["answer"]) - 1
 
+        explanation = row["explanation"]
+
         send_quiz(
-            chat_id,
+            SSC_CHAT_ID,
             question,
             options,
-            correct_answer
+            correct_answer,
+            explanation
         )
 
 
 print("Starting SSC Quiz Bot...")
 
 print("Sending 8 SSC polls...")
+
 send_from_csv("ssc.csv", SSC_CHAT_ID)
 
 print("All 8 SSC polls sent successfully!")
