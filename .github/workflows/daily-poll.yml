@@ -1,8 +1,6 @@
 name: Daily Telegram Polls
 
 on:
-  schedule:
-    - cron: "30 3 * * *"
   workflow_dispatch:
 
 jobs:
@@ -18,4 +16,4 @@ jobs:
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           SSC_CHAT_ID: ${{ secrets.SSC_CHAT_ID }}
-          BANKING_CHAT_ID: ${{ secrets.BANKING_CHAT_ID }}
+          
