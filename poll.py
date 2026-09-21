@@ -3,17 +3,17 @@ import csv
 import json
 import urllib.request
 import urllib.parse
-from datetime import datetime
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 SSC_CHAT_ID = os.environ["SSC_CHAT_ID"]
 
-QUESTIONS_PER_DAY = 8
+QUESTIONS_PER_RUN = 8
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def send_quiz(chat_id, question, options, correct_answer, explanation):
+
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPoll"
 
     data = {
@@ -37,25 +37,21 @@ def send_quiz(chat_id, question, options, correct_answer, explanation):
 
 
 def send_from_csv(filename, chat_id):
+
     filepath = os.path.join(BASE_DIR, filename)
 
     print(f"Reading file: {filepath}")
 
     with open(filepath, "r", encoding="utf-8-sig") as file:
+
         reader = csv.DictReader(file)
         rows = list(reader)
 
     if not rows:
-        print(f"{filename} is empty")
+        print("CSV file is empty.")
         return
 
-    day_number = datetime.utcnow().date().toordinal()
-    start = ((day_number - 1) * QUESTIONS_PER_DAY) % len(rows)
-
-    selected = [
-        rows[(start + i) % len(rows)]
-        for i in range(QUESTIONS_PER_DAY)
-    ]
+    selected = rows[:QUESTIONS_PER_RUN]
 
     for row in selected:
 
@@ -73,7 +69,7 @@ def send_from_csv(filename, chat_id):
         explanation = row["explanation"]
 
         send_quiz(
-            SSC_CHAT_ID,
+            chat_id,
             question,
             options,
             correct_answer,
@@ -85,6 +81,9 @@ print("Starting SSC Quiz Bot...")
 
 print("Sending 8 SSC polls...")
 
-send_from_csv("ssc.csv", SSC_CHAT_ID)
+send_from_csv(
+    "ssc_8_1.csv",
+    SSC_CHAT_ID
+)
 
 print("All 8 SSC polls sent successfully!")
