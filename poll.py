@@ -82,7 +82,7 @@ print("Starting SSC Quiz Bot...")
 print("Sending 8 SSC polls...")
 
 send_from_csv(
-    "ssc_8_1.csv",
+    "ssc_8_2.csv",
     SSC_CHAT_ID
 )
 
