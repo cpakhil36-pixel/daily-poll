@@ -3,6 +3,7 @@ import csv
 import json
 import urllib.request
 import urllib.parse
+import urllib.error
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 SSC_CHAT_ID = os.environ["SSC_CHAT_ID"]
@@ -32,8 +33,13 @@ def send_quiz(chat_id, question, options, correct_answer, explanation):
         method="POST"
     )
 
-    with urllib.request.urlopen(request) as response:
-        print(response.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(request) as response:
+            print(response.read().decode("utf-8"))
+
+    except urllib.error.HTTPError as e:
+        print("TELEGRAM ERROR:")
+        print(e.read().decode("utf-8"))
 
 
 def send_from_csv(filename, chat_id):
