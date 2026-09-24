@@ -9,6 +9,7 @@ BOT_TOKEN = os.environ["BOT_TOKEN"]
 SSC_CHAT_ID = os.environ["SSC_CHAT_ID"]
 
 QUESTIONS_PER_RUN = 8
+CSV_FILE = "ssc_8_3.csv"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,12 +20,12 @@ def send_quiz(chat_id, question, options, correct_answer, explanation):
 
     data = {
         "chat_id": chat_id,
-        "question": question,
+        "question": question[:300],
         "options": json.dumps(options, ensure_ascii=False),
         "type": "quiz",
         "correct_option_id": correct_answer,
         "is_anonymous": True,
-        "explanation": explanation
+        "explanation": explanation[:200]
     }
 
     request = urllib.request.Request(
@@ -35,23 +36,42 @@ def send_quiz(chat_id, question, options, correct_answer, explanation):
 
     try:
         with urllib.request.urlopen(request) as response:
-            print(response.read().decode("utf-8"))
+            result = json.loads(response.read().decode("utf-8"))
+
+            if result.get("ok"):
+                print("Poll sent successfully.")
+                return True
+
+            print("Telegram rejected the poll:")
+            print(result)
+            return False
 
     except urllib.error.HTTPError as e:
-        print("TELEGRAM ERROR:")
-        print(e.read().decode("utf-8"))
+        error_message = e.read().decode("utf-8")
+        print("Telegram API Error:")
+        print(error_message)
+        return False
+
+    except Exception as e:
+        print("Unexpected Error:")
+        print(str(e))
+        return False
 
 
 def send_from_csv(filename, chat_id):
 
     filepath = os.path.join(BASE_DIR, filename)
 
-    print(f"Reading file: {filepath}")
+    print(f"Reading file: {filename}")
 
-    with open(filepath, "r", encoding="utf-8-sig") as file:
+    try:
+        with open(filepath, "r", encoding="utf-8-sig", newline="") as file:
+            reader = csv.DictReader(file)
+            rows = list(reader)
 
-        reader = csv.DictReader(file)
-        rows = list(reader)
+    except FileNotFoundError:
+        print(f"CSV file not found: {filename}")
+        return
 
     if not rows:
         print("CSV file is empty.")
@@ -59,37 +79,70 @@ def send_from_csv(filename, chat_id):
 
     selected = rows[:QUESTIONS_PER_RUN]
 
-    for row in selected:
+    print(f"Total questions selected: {len(selected)}")
+    print("--------------------------------")
 
-        question = row["question"]
+    success_count = 0
 
-        options = [
-            row["option1"],
-            row["option2"],
-            row["option3"],
-            row["option4"]
-        ]
+    for number, row in enumerate(selected, start=1):
 
-        correct_answer = int(row["answer"]) - 1
+        try:
+            question = row["question"].strip()
 
-        explanation = row["explanation"]
+            options = [
+                row["option1"].strip(),
+                row["option2"].strip(),
+                row["option3"].strip(),
+                row["option4"].strip()
+            ]
 
-        send_quiz(
-            chat_id,
-            question,
-            options,
-            correct_answer,
-            explanation
-        )
+            answer = int(row["answer"].strip())
+
+            if answer not in [1, 2, 3, 4]:
+                print(f"Question {number}: Invalid answer number.")
+                continue
+
+            correct_answer = answer - 1
+
+            explanation = row["explanation"].strip()
+
+            if not question:
+                print(f"Question {number}: Question is empty.")
+                continue
+
+            if any(not option for option in options):
+                print(f"Question {number}: One or more options are empty.")
+                continue
+
+            print(f"Sending question {number}...")
+
+            success = send_quiz(
+                chat_id,
+                question,
+                options,
+                correct_answer,
+                explanation
+            )
+
+            if success:
+                success_count += 1
+
+        except Exception as e:
+            print(f"Question {number} skipped: {str(e)}")
+
+    print("--------------------------------")
+    print(f"Quiz completed: {success_count}/{len(selected)} polls sent.")
 
 
-print("Starting SSC Quiz Bot...")
-
-print("Sending 8 SSC polls...")
+print("================================")
+print("Starting SSC Quiz Bot")
+print("================================")
 
 send_from_csv(
-    "ssc_8_2.csv",
+    CSV_FILE,
     SSC_CHAT_ID
 )
 
-print("All 8 SSC polls sent successfully!")
+print("================================")
+print("SSC Quiz Bot Finished")
+print("================================")
