@@ -5,11 +5,12 @@ import urllib.request
 import urllib.parse
 import urllib.error
 
+
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 SSC_CHAT_ID = os.environ["SSC_CHAT_ID"]
 
 QUESTIONS_PER_RUN = 8
-CSV_FILE = "ssc_8_4 (2).csv"
+CSV_FILE = "ssc_8_5.csv"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -73,7 +74,6 @@ def send_from_csv(filename, chat_id):
     print(f"Reading file: {filename}")
 
     try:
-
         with open(
             filepath,
             "r",
@@ -87,13 +87,11 @@ def send_from_csv(filename, chat_id):
     except FileNotFoundError:
 
         print(f"CSV file not found: {filename}")
-
         return
 
     if not rows:
 
         print("CSV file is empty.")
-
         return
 
     selected = rows[:QUESTIONS_PER_RUN]
@@ -123,7 +121,6 @@ def send_from_csv(filename, chat_id):
                 print(
                     f"Question {number}: Invalid answer number."
                 )
-
                 continue
 
             correct_answer = answer - 1
@@ -135,7 +132,6 @@ def send_from_csv(filename, chat_id):
                 print(
                     f"Question {number}: Question is empty."
                 )
-
                 continue
 
             if any(not option for option in options):
@@ -144,7 +140,6 @@ def send_from_csv(filename, chat_id):
                     f"Question {number}: "
                     "One or more options are empty."
                 )
-
                 continue
 
             print(f"Sending question {number}...")
@@ -158,7 +153,6 @@ def send_from_csv(filename, chat_id):
             )
 
             if success:
-
                 success_count += 1
 
         except Exception as e:
