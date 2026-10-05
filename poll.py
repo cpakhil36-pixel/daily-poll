@@ -10,7 +10,7 @@ BOT_TOKEN = os.environ["BOT_TOKEN"]
 SSC_CHAT_ID = os.environ["SSC_CHAT_ID"]
 
 QUESTIONS_PER_RUN = 8
-CSV_FILE = "ssc_8_8.csv"
+CSV_FILE = "ssc_8_9.csv"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
