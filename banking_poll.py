@@ -7,10 +7,10 @@ import urllib.error
 
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
-SSC_CHAT_ID = os.environ["SSC_CHAT_ID"]
+BANKING_CHAT_ID = os.environ["BANKING_CHAT_ID"]
 
 QUESTIONS_PER_RUN = 8
-CSV_FILE = "ssc_8_10.csv"
+CSV_FILE = "banking 1.csv"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -43,7 +43,7 @@ def send_quiz(chat_id, question, options, correct_answer, explanation):
             )
 
             if result.get("ok"):
-                print("Poll sent successfully.")
+                print("Banking poll sent successfully.")
                 return True
 
             print("Telegram rejected the poll:")
@@ -142,7 +142,7 @@ def send_from_csv(filename, chat_id):
                 )
                 continue
 
-            print(f"Sending question {number}...")
+            print(f"Sending Banking question {number}...")
 
             success = send_quiz(
                 chat_id,
@@ -164,20 +164,20 @@ def send_from_csv(filename, chat_id):
     print("--------------------------------")
 
     print(
-        f"Quiz completed: "
+        f"Banking Quiz completed: "
         f"{success_count}/{len(selected)} polls sent."
     )
 
 
 print("================================")
-print("Starting SSC Quiz Bot")
+print("Starting Banking Quiz Bot")
 print("================================")
 
 send_from_csv(
     CSV_FILE,
-    SSC_CHAT_ID
+    BANKING_CHAT_ID
 )
 
 print("================================")
-print("SSC Quiz Bot Finished")
+print("Banking Quiz Bot Finished")
 print("================================")
