@@ -10,7 +10,7 @@ BOT_TOKEN = os.environ["BOT_TOKEN"]
 BANKING_CHAT_ID = os.environ["BANKING_CHAT_ID"]
 
 QUESTIONS_PER_RUN = 8
-CSV_FILE = "banking 1.csv"
+CSV_FILE = "Banking_01_fixed.csv"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -74,6 +74,7 @@ def send_from_csv(filename, chat_id):
     print(f"Reading file: {filename}")
 
     try:
+
         with open(
             filepath,
             "r",
@@ -181,3 +182,4 @@ send_from_csv(
 print("================================")
 print("Banking Quiz Bot Finished")
 print("================================")
+
