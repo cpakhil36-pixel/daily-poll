@@ -1,0 +1,7 @@
+﻿question,option1,option2,option3,option4,answer,explanation
+"Find the wrong number in the series: 32, 16, 16, 24, 50, 120, 360",32,50,120,24,2,"The intended pattern is 16 × 1 = 16, 16 × 2 = 32, 24 × 2 = 48, 48 × 3 = 144. Therefore, 50 is the wrong number in the series."
+"Find the wrong number in the series: 25, 50, 155, 623, 3119",25,50,3129,623,155,2,"The pattern is 25 × 2 + 1 = 51, 51 × 3 + 2 = 155, 155 × 4 + 3 = 623, and 623 × 5 + 4 = 3119. Therefore, 50 is the wrong number."
+"Find the wrong number in the series: 12, 55, 270, 1340, 6720",55,12,6720,1340,270,4,"The pattern is 12 × 5 − 5 = 55, 55 × 5 − 5 = 270, 270 × 5 − 5 = 1345, and 1345 × 5 − 5 = 6720. Therefore, 1340 is the wrong number."
+"Find the wrong number in the series: 148, 129, 112, 97, 86, 73",148,129,112,73,86,5,"The pattern is 148 − 19 = 129, 129 − 17 = 112, 112 − 15 = 97, 97 − 13 = 84, and 84 − 11 = 73. Therefore, 86 is the wrong number."
+"Find the wrong number in the series: 8, 13, 31, 98, 399, 1990",31,399,98,1990,8,2,"The pattern is 8 × 1 + 5 = 13, 13 × 2 + 5 = 31, 31 × 3 + 5 = 98, 98 × 4 + 5 = 397, and 397 × 5 + 5 = 1990. Therefore, 399 is the wrong number."
+"Find the wrong number in the series: 511, 342, 215, 123, 63, 26",511,342,215,123,63,4,"The pattern is 8³ − 1 = 511, 7³ − 1 = 342, 6³ − 1 = 215, 5³ − 1 = 124, 4³ − 1 = 63, and 3³ − 1 = 26. Therefore, 123 is the wrong number."
