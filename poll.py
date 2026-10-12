@@ -1,3 +1,4 @@
+
 import os
 import csv
 import json
@@ -5,18 +6,16 @@ import urllib.request
 import urllib.parse
 import urllib.error
 
-
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 SSC_CHAT_ID = os.environ["SSC_CHAT_ID"]
 
 QUESTIONS_PER_RUN = 8
-CSV_FILE = "ssc new11.csv"
+CSV_FILE = "ssc_12.csv"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def send_quiz(chat_id, question, options, correct_answer, explanation):
-
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPoll"
 
     data = {
@@ -59,12 +58,17 @@ def send_quiz(chat_id, question, options, correct_answer, explanation):
 
 
 def send_from_csv(filename, chat_id):
-
     filepath = os.path.join(BASE_DIR, filename)
+
     print(f"Reading file: {filename}")
 
     try:
-        with open(filepath, "r", encoding="utf-8-sig", newline="") as file:
+        with open(
+            filepath,
+            "r",
+            encoding="utf-8-sig",
+            newline=""
+        ) as file:
             reader = csv.DictReader(file)
             rows = list(reader)
 
@@ -77,7 +81,9 @@ def send_from_csv(filename, chat_id):
         return
 
     selected = rows[:QUESTIONS_PER_RUN]
+
     print(f"Total questions selected: {len(selected)}")
+    print("--------------------------------")
 
     success_count = 0
 
@@ -106,7 +112,10 @@ def send_from_csv(filename, chat_id):
             try:
                 answer = int(answer_text)
             except ValueError:
-                print(f"Question {number}: Answer must be 1, 2, 3, or 4.")
+                print(
+                    f"Question {number}: "
+                    "Answer must be 1, 2, 3, or 4."
+                )
                 continue
 
             if answer not in [1, 2, 3, 4]:
@@ -130,7 +139,10 @@ def send_from_csv(filename, chat_id):
             print(f"Question {number} skipped: {str(e)}")
 
     print("--------------------------------")
-    print(f"SSC Quiz completed: {success_count}/{len(selected)} polls sent.")
+    print(
+        f"SSC Quiz completed: "
+        f"{success_count}/{len(selected)} polls sent."
+    )
 
 
 if __name__ == "__main__":
